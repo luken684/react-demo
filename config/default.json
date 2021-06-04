@@ -1,4 +1,6 @@
 {
     "mongoURI": "mongodb://localhost:27017/react-app",
-    "jwtSecret": "mysecrettoken"
+    "jwtSecret": "mysecrettoken",
+    "githubClientId": "21520effad3d5c3c4ce2",
+     "githubSecret": "9eef4eb9996c9307982ba24b6989e632747886b0"
 }
