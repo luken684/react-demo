@@ -7,6 +7,8 @@ const config = require("config");
 
 const Profile = require("../../models/Profile");
 const User = require("../../models/User");
+const Post = require("../../models/Post")
+const { Mongoose } = require("mongoose");
 
 //@route GET api/profile/me
 //@desc Get current users profile
@@ -63,7 +65,7 @@ router.post(
     } = req.body;
 
     //build profile object
-    const profilefields = {};
+    const profileFields = {};
     profileFields.user = req.user.id;
     if (company) profileFields.company = company;
     if (website) profileFields.website = website;
@@ -72,7 +74,8 @@ router.post(
     if (status) profileFields.status = status;
     if (githubusername) profileFields.githubusername = githubusername;
     if (skills) {
-      profileFields.skills = skills.split(",").map((skill) => skill.trim());
+      profileFields.skills = skills.toString().split(',').map(skill => skill.trim());
+      console.log(profileFields.skills)
     }
 
     // Build social object
@@ -149,8 +152,9 @@ router.get("/user/:user_id", async (req, res) => {
 
 router.delete("/", auth, async (req, res) => {
   try {
-    //@todo - remove users posts
-    //Remoce profile
+    //Remove user posts
+    await Post.deleteMany({user: req.user.id});
+    //Remove profile
     await Profile.findOneAndRemove({ user: req.user.id });
     await User.findOneAndRemove({ _id: req.user.id });
     res.json({ msg: "User deleted" });
